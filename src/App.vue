@@ -1,8 +1,12 @@
 <template>
 
   <div class="container">
-    <Header title="Dev Backlog" />
-    <AddTask />
+    <Header @toggle-form="toggleForm" title="Dev Backlog" :showAddTask="showAddTask" />
+
+    <div v-show="showAddTask">
+      <AddTask @add-task="addTask" />
+    </div>
+    
     <Tasks @toggle-reminder="toggleReminder" @delete-task="deleteTask" :tasks="tasks" />
   </div>
   
@@ -23,10 +27,21 @@ export default {
   },  
   data() {
     return {
-      tasks: []
+      tasks: [],
+      showAddTask: false
     }
   },
   methods: {
+
+    toggleForm() {
+      this.showAddTask = !this.showAddTask
+    },
+
+    addTask(task) {
+      this.tasks = [...this.tasks, task];
+    },
+
+
     deleteTask(id) {
       
       if(confirm('Are you sure ?')){

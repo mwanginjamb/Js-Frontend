@@ -1,5 +1,10 @@
 <template>
-    <button @click="onClick()" :style="{ background: color}">{{title}}</button>
+    
+    <button @click="onClick()" :style="{ background: color}">
+        <i v-if="!state" class="fa fa-plus-circle"></i>
+        <i v-if="state" class="fa fa-minus-circle"></i>
+
+         {{title}}</button>
 </template>
 
 <script>
@@ -8,10 +13,11 @@
         props: {
             title: String,
             color: String,
+            state: Boolean
         },
         methods: {
             onClick() {
-                console.log('You just clicked me....');
+                this.$emit('toggle-form');
             }
         }
     }
