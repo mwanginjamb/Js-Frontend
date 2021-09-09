@@ -1,7 +1,12 @@
 <template>
     <header>
         <h1>{{ title }}</h1>
-        <Button :state="showAddTask" @toggle-form="$emit('toggle-form')" class="btn" color="green" :title="showAddTask ? 'Close' : 'Add Task' " />
+        <Button 
+         @btn-click="$emit('toggle-form')"
+         class="btn"
+         :state="showAddTask"
+         :color="showAddTask ? 'red' : 'green' " 
+         :title="showAddTask ? 'Close' : 'Add Task' " />
     </header>
     
 </template>

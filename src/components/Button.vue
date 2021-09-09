@@ -17,7 +17,7 @@
         },
         methods: {
             onClick() {
-                this.$emit('toggle-form');
+                this.$emit('btn-click');
             }
         }
     }

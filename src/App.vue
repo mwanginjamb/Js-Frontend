@@ -37,8 +37,17 @@ export default {
       this.showAddTask = !this.showAddTask
     },
 
-    addTask(task) {
-      this.tasks = [...this.tasks, task];
+    async addTask(task) {
+      const res = await fetch('api/tasks',{
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(task)
+      })
+
+      const data = await res.json();
+      this.tasks = [...this.tasks, data];
     },
 
 
@@ -52,29 +61,23 @@ export default {
 
     toggleReminder(id) {
       this.tasks = this.tasks.map((task) => task.id === id ? {...task, reminder: !task.reminder}: task );
+    },
+
+    async fetchTasks() {
+      const result = await fetch('api/tasks');
+      const data = await result.json();
+      return data;
+    },
+
+    async fetchTask(id) {
+      const result = await fetch(`api/tasks/${id}`);
+      const data = await result.json();
+      return data;
     }
+
   },
-  created() {
-    this.tasks = [
-      {
-        id: 1,
-        text: 'RCK - Imprest Work.',
-        day: 'Sep 10 at 2.30pm',
-        reminder: true
-      },
-      {
-        id: 2,
-        text: 'RCK cms - Court Module Work.',
-        day: 'Sep 11 at 2.30pm',
-        reminder: true
-      },
-      {
-        id: 3,
-        text: 'RCK - Imprest Work.',
-        day: 'Sep 30 at 2.30pm',
-        reminder: true
-      }
-    ]
+  async created() {
+    this.tasks = await this.fetchTasks();
   }
 }
 </script>
