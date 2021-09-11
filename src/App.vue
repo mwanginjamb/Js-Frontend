@@ -51,16 +51,42 @@ export default {
     },
 
 
-    deleteTask(id) {
+    async deleteTask(id) {
       
       if(confirm('Are you sure ?')){
-        this.tasks = this.tasks.filter(task => task.id !== id);
+
+        const res = await fetch(`api/tasks/${id}`, {
+          method: 'DELETE'
+        })
+
+        res.status === 200 ?(this.tasks = this.tasks.filter(task => task.id !== id)): alert('Error Deleting Task.')
+
+        ;
       }
         
     },
 
-    toggleReminder(id) {
-      this.tasks = this.tasks.map((task) => task.id === id ? {...task, reminder: !task.reminder}: task );
+    async toggleReminder(id) {
+      const taskToToggle = await this.fetchTask(id);
+      const updatePayload = {...taskToToggle, reminder: !taskToToggle.reminder};
+      
+      const res = await fetch(`api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatePayload)
+      })
+
+      const data = await res.json();
+
+      if(res.status === 200) {
+        this.tasks = this.tasks.map((task) => task.id === id ? {...task, reminder: data.reminder}: task );
+      }else {
+        alert(`Couldn't Update Task Reminder`);
+      }
+      
+      
     },
 
     async fetchTasks() {
